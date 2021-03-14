@@ -4,14 +4,13 @@ from entity import Entity
 from fov_functions import initialize_fov, recompute_fov
 from input_handlers import handle_keys
 from map_objects.game_map import GameMap
-from render_functions import clear_all, render_all
+from render_functions import clear_all, render_all, render_ui
 from colors import colors
 from pprint import pprint
+import ui
 
 def main():
     paused = True
-    mode = "map"
-    editentity = None
 
     screen_width = 60
     screen_height = 40
@@ -29,6 +28,7 @@ def main():
     player = Entity(int(screen_width / 2), int(screen_height / 2), '@', "DEV", libtcod.white, "")
     entities = [player]
     items = []
+    uis = []
 
     libtcod.console_set_custom_font('my20x20.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
     libtcod.console_init_root(screen_width, screen_height, 'PERMADEV', False)
@@ -58,12 +58,13 @@ def main():
         if fov_recompute:
             recompute_fov(fov_map, player.x, player.y, fov_radius, fov_light_walls, fov_algorithm)
 
-        render_all(con, entities, items, game_map, fov_map, fov_recompute, screen_width, screen_height, colors)
+        render_all(con, entities, items, uis, game_map, fov_map, fov_recompute, screen_width, screen_height, colors)
 
         fov_recompute = False
 
         if paused:
             con.print(0, 0, "PAUSED", libtcod.red, libtcod.yellow)
+            con.print(7, 0, "Menu", libtcod.black, libtcod.white)
         else:
             con.print(0, 0, "RUNNING")
 
@@ -77,16 +78,14 @@ def main():
         if paused and mouse.lbutton:
             for entity in entities:
                 if entity.x == mouse.cx and entity.y == mouse.cy:
-                    mode = "dev"
-                    editentity = entity
+                    uis.append(ui.Editor(3, 4, entity))
+            if mouse.cx == 7 and mouse.cy == 0:
+                uis.append(ui.Dropdown(7, 1, [
+                    {"name": "Design", "cb": lambda: print("foo")},
+                    {"name": "Build", "cb": lambda: print("foo")},
+                ]))
 
-        if paused and mode == "dev":
-            con.draw_frame(2, 2, 40, 24, editentity.name, True, libtcod.white, libtcod.black)
-            # y = 0
-            # for l in editentity.log:
-            #     y += 1
-            #     con.print(3, 3+y, l, libtcod.white, libtcod.black)
-            con.print(3, 4, editentity.ai_text, libtcod.white, libtcod.black)
+        render_ui(con, uis, mouse)
 
         libtcod.console_blit(con, 0, 0, screen_width, screen_height, 0, 0, 0)
 
@@ -103,7 +102,7 @@ def main():
 
         if toggle:
             paused = not paused
-            mode = "map"
+            uis = []
 
         if not paused:
             if move:
