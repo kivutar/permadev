@@ -64,7 +64,51 @@ def main():
 
         if paused:
             con.print(0, 0, "PAUSED", libtcod.red, libtcod.yellow)
-            con.print(7, 0, "Menu", libtcod.black, libtcod.white)
+            uis.append(ui.MenuBar(7, 0, [
+                    {
+                        "name": "Action",
+                        "cb": lambda: uis.append(ui.Dropdown(7, 1, [
+                            {
+                                "name": "Plan",
+                                "cb": lambda: uis.append(ui.Dropdown(15, 2, [
+                                    {
+                                        "name": "Storage",
+                                        "cb": lambda: print("foo")
+                                    },
+                                    {
+                                        "name": "Living",
+                                        "cb": lambda: print("foo")
+                                    },
+                                    {
+                                        "name": "Danger",
+                                        "cb": lambda: print("foo")
+                                    },
+                                ]))
+                            },
+                            {
+                                "name": "Build",
+                                "cb": lambda: uis.append(ui.Dropdown(15, 2, [
+                                    {
+                                        "name": "Wall",
+                                        "cb": lambda: print("foo")
+                                    },
+                                    {
+                                        "name": "Door",
+                                        "cb": lambda: print("foo")
+                                    },
+                                ]))
+                            },
+                        ]))
+                    },
+                    {
+                        "name": "Units",
+                        "cb": lambda: print("foo")
+                    },
+                    {
+                        "name": "Stats",
+                        "cb": lambda: print("foo")
+                    },
+                ]))
         else:
             con.print(0, 0, "RUNNING")
 
@@ -72,18 +116,12 @@ def main():
             for entity in entities:
                 if entity.x == mouse.cx and entity.y == mouse.cy:
                     libtcod.console_set_char_background(con, mouse.cx, mouse.cy, libtcod.grey)
-                    #con.draw_frame(mouse.cx, mouse.cy, 20, 3, entity.name, True, libtcod.white, libtcod.black)
                     con.print(mouse.cx+1, mouse.cy, entity.name, libtcod.black, libtcod.green)
 
         if paused and mouse.lbutton:
             for entity in entities:
                 if entity.x == mouse.cx and entity.y == mouse.cy:
                     uis.append(ui.Editor(3, 4, entity))
-            if mouse.cx == 7 and mouse.cy == 0:
-                uis.append(ui.Dropdown(7, 1, [
-                    {"name": "Design", "cb": lambda: print("foo")},
-                    {"name": "Build", "cb": lambda: print("foo")},
-                ]))
 
         for u in uis:
             u.update(mouse)
