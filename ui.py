@@ -9,6 +9,12 @@ class Dropdown:
 		self.height = len(items)+2
 		self.items = items
 
+	def update(self, mouse):
+		if mouse.lbutton:
+			for i, item in enumerate(self.items):
+				if mouse.cy == self.y+1+i:
+					item.get("cb")()
+
 	def draw(self, con, mouse):
 		con.draw_frame(self.x, self.y, self.width, self.height, "", True, libtcod.white, libtcod.black)
 		for i, item in enumerate(self.items):
@@ -25,6 +31,9 @@ class Editor:
 		self.width = 40
 		self.height = 24
 		self.entity = entity
+
+	def update(self, mouse):
+		pass
 
 	def draw(self, con, mouse):
 		con.draw_frame(self.x, self.y, self.width, self.height, self.entity.name, True, libtcod.white, libtcod.black)

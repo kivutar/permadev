@@ -4,7 +4,7 @@ from entity import Entity
 from fov_functions import initialize_fov, recompute_fov
 from input_handlers import handle_keys
 from map_objects.game_map import GameMap
-from render_functions import clear_all, render_all, render_ui
+from render_functions import clear_all, render_all
 from colors import colors
 from pprint import pprint
 import ui
@@ -58,7 +58,7 @@ def main():
         if fov_recompute:
             recompute_fov(fov_map, player.x, player.y, fov_radius, fov_light_walls, fov_algorithm)
 
-        render_all(con, entities, items, uis, game_map, fov_map, fov_recompute, screen_width, screen_height, colors)
+        render_all(con, entities, items, game_map, fov_map, fov_recompute, screen_width, screen_height, colors)
 
         fov_recompute = False
 
@@ -85,7 +85,11 @@ def main():
                     {"name": "Build", "cb": lambda: print("foo")},
                 ]))
 
-        render_ui(con, uis, mouse)
+        for u in uis:
+            u.update(mouse)
+
+        for u in uis:
+            u.draw(con, mouse)
 
         libtcod.console_blit(con, 0, 0, screen_width, screen_height, 0, 0, 0)
 
