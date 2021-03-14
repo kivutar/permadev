@@ -5,7 +5,7 @@ class Entity:
     """
     A generic object to represent players, enemies, items, etc.
     """
-    def __init__(self, x, y, char, name, color, ai_text=""):
+    def __init__(self, x, y, char, name, color, ai_text="", blocking=True):
         self.x = x
         self.y = y
         self.char = char
@@ -21,6 +21,7 @@ class Entity:
         self.max_energy = 3000
         self.energy = 3000
         self.busy = 0
+        self.blocking = blocking
         if char == 'G':
             self.item_capacity = 3
 

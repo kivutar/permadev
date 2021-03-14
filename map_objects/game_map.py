@@ -106,5 +106,8 @@ class GameMap:
     def is_blocked(self, x, y):
         if self.tiles[x][y].blocked:
             return True
+        for entity in self.entities:
+            if entity.x == x and entity.y == y and entity.blocking:
+                return True
 
         return False
