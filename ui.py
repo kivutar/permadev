@@ -32,7 +32,7 @@ class Dropdown:
 	def __init__(self, x, y, items):
 		self.x = x
 		self.y = y
-		self.width = 8
+		self.width = 12
 		self.height = len(items)+2
 		self.items = items
 

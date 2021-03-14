@@ -69,8 +69,8 @@ def main():
                         "name": "Action",
                         "cb": lambda: uis.append(ui.Dropdown(7, 1, [
                             {
-                                "name": "Plan",
-                                "cb": lambda: uis.append(ui.Dropdown(15, 2, [
+                                "name": "Mark zone",
+                                "cb": lambda: uis.append(ui.Dropdown(19, 1, [
                                     {
                                         "name": "Storage",
                                         "cb": lambda: print("foo")
@@ -87,7 +87,7 @@ def main():
                             },
                             {
                                 "name": "Build",
-                                "cb": lambda: uis.append(ui.Dropdown(15, 2, [
+                                "cb": lambda: uis.append(ui.Dropdown(19, 2, [
                                     {
                                         "name": "Wall",
                                         "cb": lambda: print("foo")
@@ -96,7 +96,19 @@ def main():
                                         "name": "Door",
                                         "cb": lambda: print("foo")
                                     },
+                                    {
+                                        "name": "Wire",
+                                        "cb": lambda: print("foo")
+                                    },
+                                    {
+                                        "name": "Panel",
+                                        "cb": lambda: print("foo")
+                                    },
                                 ]))
+                            },
+                            {
+                                "name": "Dig",
+                                "cb": lambda: print("foo")
                             },
                         ]))
                     },
@@ -106,6 +118,10 @@ def main():
                     },
                     {
                         "name": "Stats",
+                        "cb": lambda: print("foo")
+                    },
+                    {
+                        "name": "Zones",
                         "cb": lambda: print("foo")
                     },
                 ]))
