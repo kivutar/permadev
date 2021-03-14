@@ -5,15 +5,13 @@ class Entity:
     """
     A generic object to represent players, enemies, items, etc.
     """
-    def __init__(self, x, y, char, name, color, ai=None, ai_text=""):
+    def __init__(self, x, y, char, name, color, ai_text=""):
         self.x = x
         self.y = y
         self.char = char
         self.name = name
         self.color = color
-        self.ai = ai
         self.ai_text = ai_text
-        self.period = 25
         self.t = 0
         self.item_capacity = 0
         self.items = []
@@ -22,6 +20,7 @@ class Entity:
         self.log = []
         self.max_energy = 3000
         self.energy = 3000
+        self.busy = 0
         if char == 'G':
             self.item_capacity = 3
 
@@ -31,9 +30,9 @@ class Entity:
         self.y += dy
 
     def ai_step(self, game_map, items):
-        self.t += 1
-        if self.ai != None and self.ai_text != "" and self.period == self.t and self.energy > 0:
-            self.t = 0
+        self.busy -= 1
+        if self.ai_text != "" and self.busy <= 0 and self.energy > 0:
+            self.busy = 0
             exec(self.ai_text, {
                 "simple_sensor": ai.simple_sensor,
                 "simple_pick": ai.simple_pick,

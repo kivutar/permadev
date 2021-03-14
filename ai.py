@@ -19,6 +19,7 @@ def random_dir():
 
 # check if an item is on the same tile as the entity
 def simple_sensor(self, items):
+	self.busy += 5
 	self.energy -= 1
 	if self.energy <= 0:
 		self.log.append("SENSOR FAILED: OUT OF ENERGY")
@@ -30,6 +31,7 @@ def simple_sensor(self, items):
 	return None
 
 def simple_move(self, game_map):
+	self.busy += 15
 	self.energy -= 2
 	if self.energy <= 0:
 		self.log.append("MOVE FAILED: OUT OF ENERGY")
@@ -43,6 +45,7 @@ def simple_move(self, game_map):
 		self.log.append("FAILED MOVE TO %s %s" % d)
 
 def simple_pick(self, items, item):
+	self.busy += 10
 	self.energy -= 4
 	if self.energy <= 0:
 		self.log.append("PICK FAILED: OUT OF ENERGY")
@@ -66,9 +69,6 @@ def memorize_location(self, x, y):
 wanderer_text = """simple_move(self, game_map)
 """
 
-def wanderer(self, game_map, items):
-	simple_move(self, game_map)
-
 gatherer_text = """item = simple_sensor(self, items)
 if item != None:
   res = simple_pick(self, items, item)
@@ -77,12 +77,3 @@ if item != None:
 else:
   simple_move(self, game_map)
 """
-
-def gatherer(self, game_map, items):
-	item = simple_sensor(self, items)
-	if item != None:
-		res = simple_pick(self, items, item)
-		if res == False:
-			simple_move(self, game_map)
-	else:
-		simple_move(self, game_map)

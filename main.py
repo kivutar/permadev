@@ -26,7 +26,7 @@ def main():
     fov_light_walls = True
     fov_radius = 10
 
-    player = Entity(int(screen_width / 2), int(screen_height / 2), '@', "DEV", libtcod.white, None, "")
+    player = Entity(int(screen_width / 2), int(screen_height / 2), '@', "DEV", libtcod.white, "")
     entities = [player]
     items = []
 
@@ -95,7 +95,6 @@ def main():
         clear_all(con, entities, items)
 
         action = handle_keys(key)
-        # handle_mouse(mouse)
 
         move = action.get('move')
         exit = action.get('exit')
@@ -112,9 +111,6 @@ def main():
                 if not game_map.is_blocked(player.x + dx, player.y + dy):
                     player.move(dx, dy)
                     fov_recompute = True
-                # for entity in entities:
-                #     if entity.x == player.x and entity.y == player.y and entity != player:
-                #         pprint(vars(entity))
 
         if exit:
             return True

@@ -87,10 +87,10 @@ class GameMap:
 
                 i = randint(0, 60)
                 if i == 1:
-                    bot = Entity(x, y, 'W', "WANDERER", libtcod.green, ai.wanderer, ai.wanderer_text)
+                    bot = Entity(x, y, 'W', "WANDERER", libtcod.green, ai.wanderer_text)
                     self.entities.insert(0, bot)
                 elif i == 2:
-                    bot = Entity(x, y, 'G', "GATHERER", libtcod.green, ai.gatherer, ai.gatherer_text)
+                    bot = Entity(x, y, 'G', "GATHERER", libtcod.green, ai.gatherer_text)
                     self.entities.insert(0, bot)
 
     def create_h_tunnel(self, x1, x2, y):
