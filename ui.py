@@ -9,7 +9,7 @@ class MenuBar:
 		self.height = 1
 		self.items = items
 
-	def update(self, mouse):
+	def update(self, mouse, key):
 		if mouse.lbutton_pressed:
 			x = 0
 			for item in self.items:
@@ -36,7 +36,7 @@ class Dropdown:
 		self.height = len(items)+2
 		self.items = items
 
-	def update(self, mouse):
+	def update(self, mouse, key):
 		if mouse.lbutton_pressed:
 			for i, item in enumerate(self.items):
 				if mouse.cy == self.y+1+i and mouse.cx >= self.x and mouse.cx <= self.x+self.width:
@@ -58,10 +58,35 @@ class Editor:
 		self.width = 40
 		self.height = 24
 		self.entity = entity
+		self.text = self.entity.ai_text
+		self.cursorPos = len(self.text)
 
-	def update(self, mouse):
-		pass
+	def charToPos(self, c):
+		x = 0
+		y = 0
+		for i in range(c):
+			x += 1
+			if self.text[i] == '\n':
+				y += 1
+				x = 0
+		return (x, y)
+
+	def lines(self):
+		lines = 0
+		for i in range(len(self.text)):
+			if self.text[i] == '\n':
+				lines += 1
+		return lines
+
+	def update(self, mouse, key):
+		if key.vk == libtcod.KEY_LEFT:
+			self.cursorPos = max(0, self.cursorPos-1)
+		elif key.vk == libtcod.KEY_RIGHT:
+			self.cursorPos = min(len(self.text), self.cursorPos+1)
 
 	def draw(self, con, mouse):
+		(px, py) = self.charToPos(self.cursorPos)
+
 		con.draw_frame(self.x, self.y, self.width, self.height, self.entity.name, True, libtcod.white, libtcod.black)
-		con.print(self.x+1, self.y+2, self.entity.ai_text, libtcod.white, libtcod.black)
+		con.print(self.x+1, self.y+2, self.text, libtcod.white, libtcod.black)
+		libtcod.console_set_char_background(con, self.x+1+px, self.y+2+py, libtcod.green)

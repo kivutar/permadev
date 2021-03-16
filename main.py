@@ -47,7 +47,7 @@ def main():
     mouse = libtcod.Mouse()
 
     while not libtcod.console_is_window_closed():
-        libtcod.console_clear(con)
+        con.clear()
 
         libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS, key, mouse)
 
@@ -140,7 +140,7 @@ def main():
                     uis.append(ui.Editor(3, 4, entity))
 
         for u in uis:
-            u.update(mouse)
+            u.update(mouse, key)
 
         for u in uis:
             u.draw(con, mouse)
