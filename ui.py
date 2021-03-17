@@ -81,7 +81,7 @@ class Editor:
 		self.entity = entity
 		self.text = self.entity.ai_text
 		self.cursorPos = len(self.text)
-		self.saveBtn = Button(self.x, self.y+self.height-1, "SAVE", lambda: self.saveAndQuit(self))
+		self.saveBtn = Button(self.x, self.y+self.height-1, "SAVE", lambda: self.saveAndQuit())
 
 	def charToPos(self, c):
 		x = 0
@@ -104,10 +104,8 @@ class Editor:
 		self.cursorPos = max(0, self.cursorPos)
 		self.cursorPos = min(len(self.text), self.cursorPos)
 
-	def saveAndQuit(foo, self):
+	def saveAndQuit(self):
 		self.entity.ai_text = self.text
-		print(self.entity.ai_text)
-		#uis.remove(self)
 
 	def update(self, mouse, key):
 		if key.vk == tcod.KEY_LEFT:
