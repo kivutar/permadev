@@ -1,5 +1,6 @@
-import tcod as libtcod
+import tcod
 import ai
+
 
 class Entity:
     """
@@ -45,10 +46,10 @@ class Entity:
 
             # recolor based on battery
             if self.energy <= 0:
-                self.color = libtcod.grey
+                self.color = tcod.grey
             elif self.energy <= 1000:
-                self.color = libtcod.red
+                self.color = tcod.red
             elif self.energy <= 2000:
-                self.color = libtcod.yellow
+                self.color = tcod.yellow
             else:
-                self.color = libtcod.green
+                self.color = tcod.green

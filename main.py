@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import tcod as libtcod
+import tcod
 from entity import Entity
 from fov_functions import initialize_fov, recompute_fov
 from input_handlers import handle_keys
@@ -8,6 +8,7 @@ from render_functions import clear_all, render_all
 from colors import colors
 from pprint import pprint
 import ui
+
 
 def main():
     paused = True
@@ -25,16 +26,16 @@ def main():
     fov_light_walls = True
     fov_radius = 10
 
-    player = Entity(int(screen_width / 2), int(screen_height / 2), '@', "DEV", libtcod.white, "")
+    player = Entity(int(screen_width / 2), int(screen_height / 2), '@', "DEV", tcod.white, "")
     entities = [player]
     items = []
     uis = []
 
-    libtcod.console_set_custom_font('my20x20.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
-    libtcod.console_init_root(screen_width, screen_height, 'PERMADEV', False)
-    libtcod.sys_set_fps(30)
+    tcod.console_set_custom_font('my20x20.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
+    tcod.console_init_root(screen_width, screen_height, 'PERMADEV', False)
+    tcod.sys_set_fps(30)
 
-    con = libtcod.console.Console(screen_width, screen_height)
+    con = tcod.console.Console(screen_width, screen_height)
 
     game_map = GameMap(map_width, map_height, entities, items)
     game_map.make_map(max_rooms, room_min_size, room_max_size, map_width, map_height, player)
@@ -43,13 +44,13 @@ def main():
 
     fov_map = initialize_fov(game_map)
 
-    key = libtcod.Key()
-    mouse = libtcod.Mouse()
+    key = tcod.Key()
+    mouse = tcod.Mouse()
 
-    while not libtcod.console_is_window_closed():
+    while not tcod.console_is_window_closed():
         con.clear()
 
-        libtcod.sys_check_for_event(libtcod.EVENT_KEY_PRESS, key, mouse)
+        tcod.sys_check_for_event(tcod.EVENT_KEY_PRESS, key, mouse)
 
         if not paused:
             for entity in entities:
@@ -63,7 +64,7 @@ def main():
         fov_recompute = False
 
         if paused:
-            con.print(0, 0, "PAUSED", libtcod.red, libtcod.yellow)
+            con.print(0, 0, "PAUSED", tcod.red, tcod.yellow)
             uis.append(ui.MenuBar(7, 0, [
                     {
                         "name": "Action",
@@ -131,8 +132,8 @@ def main():
         if paused:
             for entity in entities:
                 if entity.x == mouse.cx and entity.y == mouse.cy:
-                    libtcod.console_set_char_background(con, mouse.cx, mouse.cy, libtcod.grey)
-                    con.print(mouse.cx+1, mouse.cy, entity.name, libtcod.black, libtcod.green)
+                    tcod.console_set_char_background(con, mouse.cx, mouse.cy, tcod.grey)
+                    con.print(mouse.cx+1, mouse.cy, entity.name, tcod.black, tcod.green)
 
         if paused and mouse.lbutton:
             for entity in entities:
@@ -145,9 +146,9 @@ def main():
         for u in uis:
             u.draw(con, mouse)
 
-        libtcod.console_blit(con, 0, 0, screen_width, screen_height, 0, 0, 0)
+        tcod.console_blit(con, 0, 0, screen_width, screen_height, 0, 0, 0)
 
-        libtcod.console_flush()
+        tcod.console_flush()
 
         clear_all(con, entities, items)
 
@@ -173,7 +174,7 @@ def main():
             return True
 
         if fullscreen:
-            libtcod.console_set_fullscreen(not libtcod.console_is_fullscreen())
+            tcod.console_set_fullscreen(not tcod.console_is_fullscreen())
 
 
 if __name__ == '__main__':

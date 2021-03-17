@@ -1,10 +1,10 @@
-import tcod as libtcod
+import tcod
 
 colors = {
-	'dark_wall': libtcod.Color(50, 50, 50),
-	'dark_ground': libtcod.Color(30, 30, 30),
-	'dark_ground_bg': libtcod.Color(15, 15, 15),
-	'light_wall': libtcod.Color(100, 100, 70),
-	'light_ground': libtcod.Color(50, 100, 50),
-	'grass': libtcod.Color(70, 100, 70),
+	'dark_wall': tcod.Color(50, 50, 50),
+	'dark_ground': tcod.Color(30, 30, 30),
+	'dark_ground_bg': tcod.Color(15, 15, 15),
+	'light_wall': tcod.Color(100, 100, 70),
+	'light_ground': tcod.Color(50, 100, 50),
+	'grass': tcod.Color(70, 100, 70),
 }

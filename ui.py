@@ -1,4 +1,4 @@
-import tcod as libtcod
+import tcod
 
 class MenuBar:
 
@@ -20,11 +20,11 @@ class MenuBar:
 	def draw(self, con, mouse):
 		x = 0
 		for item in self.items:
-			bg = libtcod.black
+			bg = tcod.black
 			w = len(item.get("name"))
 			if mouse.cy == self.y and mouse.cx >= self.x+x and mouse.cx <= self.x+x+w:
-			 	bg = libtcod.green
-			con.print(self.x+x, self.y, item.get("name"), libtcod.white, bg)
+			 	bg = tcod.green
+			con.print(self.x+x, self.y, item.get("name"), tcod.white, bg)
 			x += w + 1
 
 class Dropdown:
@@ -43,12 +43,12 @@ class Dropdown:
 					item.get("cb")()
 
 	def draw(self, con, mouse):
-		con.draw_frame(self.x, self.y, self.width, self.height, "", True, libtcod.white, libtcod.black)
+		con.draw_frame(self.x, self.y, self.width, self.height, "", True, tcod.white, tcod.black)
 		for i, item in enumerate(self.items):
-			bg = libtcod.black
+			bg = tcod.black
 			if mouse.cy == self.y+1+i and mouse.cx >= self.x and mouse.cx <= self.x+self.width:
-				bg = libtcod.green
-			con.print(self.x+1, self.y+1+i, item.get("name"), libtcod.white, bg)
+				bg = tcod.green
+			con.print(self.x+1, self.y+1+i, item.get("name"), tcod.white, bg)
 
 class Editor:
 
@@ -83,36 +83,36 @@ class Editor:
 		self.cursorPos = min(len(self.text), self.cursorPos)
 
 	def update(self, mouse, key):
-		if key.vk == libtcod.KEY_LEFT:
+		if key.vk == tcod.KEY_LEFT:
 			self.cursorPos -= 1
 			self.clamp()
-		elif key.vk == libtcod.KEY_RIGHT:
+		elif key.vk == tcod.KEY_RIGHT:
 			self.cursorPos += 1
 			self.clamp()
-		elif key.vk == libtcod.KEY_DOWN:
+		elif key.vk == tcod.KEY_DOWN:
 			(px, py) = self.charToPos(self.cursorPos)
 			for i in range(self.cursorPos, len(self.text)):
 				if self.text[i] == '\n':
 					self.cursorPos = i+1+px
 					self.clamp()
 					break
-		elif key.vk == libtcod.KEY_UP:
+		elif key.vk == tcod.KEY_UP:
 			(px, py) = self.charToPos(self.cursorPos)
 			for i in reversed(range(self.cursorPos)):
 				if self.text[i] == '\n':
 					self.cursorPos = i-1
 					self.clamp()
 					break
-		elif key.vk == libtcod.KEY_BACKSPACE:
+		elif key.vk == tcod.KEY_BACKSPACE:
 			if self.cursorPos > 0:
 				self.cursorPos -= 1
 				self.clamp()
 				self.text = self.text[:self.cursorPos] + self.text[self.cursorPos+1:]
-		elif key.vk == libtcod.KEY_TEXT:
+		elif key.vk == tcod.KEY_TEXT:
 			self.text = self.text[:self.cursorPos] + key.text + self.text[self.cursorPos:]
 			self.cursorPos += 1
 			self.clamp()
-		elif key.vk == libtcod.KEY_ENTER:
+		elif key.vk == tcod.KEY_ENTER:
 			self.text = self.text[:self.cursorPos] + '\n' + self.text[self.cursorPos:]
 			self.cursorPos += 1
 			self.clamp()
@@ -120,6 +120,6 @@ class Editor:
 	def draw(self, con, mouse):
 		(px, py) = self.charToPos(self.cursorPos)
 
-		con.draw_frame(self.x, self.y, self.width, self.height, self.entity.name, True, libtcod.white, libtcod.black)
-		con.print(self.x+1, self.y+2, self.text, libtcod.white, libtcod.black)
-		libtcod.console_set_char_background(con, self.x+1+px, self.y+2+py, libtcod.green)
+		con.draw_frame(self.x, self.y, self.width, self.height, self.entity.name, True, tcod.white, tcod.black)
+		con.print(self.x+1, self.y+2, self.text, tcod.white, tcod.black)
+		tcod.console_set_char_background(con, self.x+1+px, self.y+2+py, tcod.green)
