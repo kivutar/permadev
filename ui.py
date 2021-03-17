@@ -87,6 +87,12 @@ class Editor:
 			if self.cursorPos > 0:
 				self.cursorPos = min(len(self.text), self.cursorPos-1)
 				self.text = self.text[:self.cursorPos] + self.text[self.cursorPos+1:]
+		elif key.vk == libtcod.KEY_TEXT:
+			self.text = self.text[:self.cursorPos] + key.text + self.text[self.cursorPos:]
+			self.cursorPos = min(len(self.text), self.cursorPos+1)
+		elif key.vk == libtcod.KEY_ENTER:
+			self.text = self.text[:self.cursorPos] + '\n' + self.text[self.cursorPos:]
+			self.cursorPos = min(len(self.text), self.cursorPos+1)
 
 	def draw(self, con, mouse):
 		(px, py) = self.charToPos(self.cursorPos)
