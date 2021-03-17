@@ -120,6 +120,6 @@ class Editor:
 	def draw(self, con, mouse):
 		(px, py) = self.charToPos(self.cursorPos)
 
-		con.draw_frame(self.x, self.y, self.width, self.height, self.entity.name, True, tcod.white, tcod.black)
-		con.print(self.x+1, self.y+2, self.text, tcod.white, tcod.black)
-		tcod.console_set_char_background(con, self.x+1+px, self.y+2+py, tcod.green)
+		con.draw_frame(self.x, self.y, self.width, self.height, self.entity.name, True, tcod.Color(168,168,168), tcod.Color(0,0,168))
+		con.print(self.x+1, self.y+2, self.text, tcod.Color(168,168,168), tcod.Color(0,0,168))
+		tcod.console_set_char_background(con, self.x+1+px, self.y+2+py, tcod.Color(0,168,168))
