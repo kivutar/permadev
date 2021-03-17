@@ -78,21 +78,44 @@ class Editor:
 				lines += 1
 		return lines
 
+	def clamp(self):
+		self.cursorPos = max(0, self.cursorPos)
+		self.cursorPos = min(len(self.text), self.cursorPos)
+
 	def update(self, mouse, key):
 		if key.vk == libtcod.KEY_LEFT:
-			self.cursorPos = max(0, self.cursorPos-1)
+			self.cursorPos -= 1
+			self.clamp()
 		elif key.vk == libtcod.KEY_RIGHT:
-			self.cursorPos = min(len(self.text), self.cursorPos+1)
+			self.cursorPos += 1
+			self.clamp()
+		elif key.vk == libtcod.KEY_DOWN:
+			(px, py) = self.charToPos(self.cursorPos)
+			for i in range(self.cursorPos, len(self.text)):
+				if self.text[i] == '\n':
+					self.cursorPos = i+1+px
+					self.clamp()
+					break
+		elif key.vk == libtcod.KEY_UP:
+			(px, py) = self.charToPos(self.cursorPos)
+			for i in reversed(range(self.cursorPos)):
+				if self.text[i] == '\n':
+					self.cursorPos = i-1
+					self.clamp()
+					break
 		elif key.vk == libtcod.KEY_BACKSPACE:
 			if self.cursorPos > 0:
-				self.cursorPos = min(len(self.text), self.cursorPos-1)
+				self.cursorPos -= 1
+				self.clamp()
 				self.text = self.text[:self.cursorPos] + self.text[self.cursorPos+1:]
 		elif key.vk == libtcod.KEY_TEXT:
 			self.text = self.text[:self.cursorPos] + key.text + self.text[self.cursorPos:]
-			self.cursorPos = min(len(self.text), self.cursorPos+1)
+			self.cursorPos += 1
+			self.clamp()
 		elif key.vk == libtcod.KEY_ENTER:
 			self.text = self.text[:self.cursorPos] + '\n' + self.text[self.cursorPos:]
-			self.cursorPos = min(len(self.text), self.cursorPos+1)
+			self.cursorPos += 1
+			self.clamp()
 
 	def draw(self, con, mouse):
 		(px, py) = self.charToPos(self.cursorPos)
