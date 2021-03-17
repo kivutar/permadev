@@ -8,7 +8,7 @@ from render_functions import clear_all, render_all
 from colors import colors
 from pprint import pprint
 import ui
-
+import glo
 
 def main():
     paused = True
@@ -28,7 +28,6 @@ def main():
 
     player = Entity(int(screen_width / 2), int(screen_height / 2), '@', "DEV", tcod.white, "")
     entities = [player]
-    items = []
     uis = []
 
     tcod.console_set_custom_font('my20x20.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
@@ -37,12 +36,12 @@ def main():
 
     con = tcod.console.Console(screen_width, screen_height)
 
-    game_map = GameMap(map_width, map_height, entities, items)
-    game_map.make_map(max_rooms, room_min_size, room_max_size, map_width, map_height, player)
+    glo.game_map = GameMap(map_width, map_height, entities, glo.items)
+    glo.game_map.make_map(max_rooms, room_min_size, room_max_size, map_width, map_height, player)
 
     fov_recompute = True
 
-    fov_map = initialize_fov(game_map)
+    fov_map = initialize_fov()
 
     key = tcod.Key()
     mouse = tcod.Mouse()
@@ -54,12 +53,12 @@ def main():
 
         if not paused:
             for entity in entities:
-                entity.ai_step(game_map, items)
+                entity.ai_step()
 
         if fov_recompute:
             recompute_fov(fov_map, player.x, player.y, fov_radius, fov_light_walls, fov_algorithm)
 
-        render_all(con, entities, items, game_map, fov_map, fov_recompute, screen_width, screen_height, colors)
+        render_all(con, entities, fov_map, fov_recompute, screen_width, screen_height, colors)
 
         fov_recompute = False
 
@@ -150,7 +149,7 @@ def main():
 
         tcod.console_flush()
 
-        clear_all(con, entities, items)
+        clear_all(con, entities)
 
         action = handle_keys(key)
 
@@ -166,7 +165,7 @@ def main():
         if not paused:
             if move:
                 dx, dy = move
-                if not game_map.is_blocked(player.x + dx, player.y + dy):
+                if not glo.game_map.is_blocked(player.x + dx, player.y + dy):
                     player.move(dx, dy)
                     fov_recompute = True
 

@@ -1,0 +1,2 @@
+game_map = []
+items = []

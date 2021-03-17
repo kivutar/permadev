@@ -31,17 +31,15 @@ class Entity:
         self.x += dx
         self.y += dy
 
-    def ai_step(self, game_map, items):
+    def ai_step(self):
         self.busy -= 1
         if self.ai_text != "" and self.busy <= 0 and self.energy > 0:
             self.busy = 0
             exec(self.ai_text, {
                 "simple_sensor": ai.simple_sensor,
                 "simple_pick": ai.simple_pick,
-                "simple_move": ai.simple_move,
+                "rand_move": ai.rand_move,
                 "self": self,
-                "items": items,
-                "game_map": game_map,
                 })
 
             # recolor based on battery
