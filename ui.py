@@ -50,6 +50,27 @@ class Dropdown:
 				bg = tcod.green
 			con.print(self.x+1, self.y+1+i, item.get("name"), tcod.white, bg)
 
+class Button:
+
+	def __init__(self, x, y, text, cb):
+		self.x = x
+		self.y = y
+		self.text = text
+		self.width = len(self.text)
+		self.height = 1
+		self.cb = cb
+
+	def update(self, mouse, key):
+		if mouse.lbutton_pressed:
+			if mouse.cy == self.y and mouse.cx >= self.x and mouse.cx <= self.x+self.width:
+				self.cb()
+
+	def draw(self, con, mouse):
+		bg = tcod.black
+		if mouse.cy == self.y and mouse.cx >= self.x and mouse.cx <= self.x+self.width:
+			bg = tcod.green
+		con.print(self.x, self.y, self.text, tcod.white, bg)
+
 class Editor:
 
 	def __init__(self, x, y, entity):
@@ -60,6 +81,7 @@ class Editor:
 		self.entity = entity
 		self.text = self.entity.ai_text
 		self.cursorPos = len(self.text)
+		self.saveBtn = Button(self.x, self.y+self.height-1, "SAVE", lambda: self.saveAndQuit(self))
 
 	def charToPos(self, c):
 		x = 0
@@ -82,6 +104,11 @@ class Editor:
 		self.cursorPos = max(0, self.cursorPos)
 		self.cursorPos = min(len(self.text), self.cursorPos)
 
+	def saveAndQuit(foo, self):
+		self.entity.ai_text = self.text
+		print(self.entity.ai_text)
+		#uis.remove(self)
+
 	def update(self, mouse, key):
 		if key.vk == tcod.KEY_LEFT:
 			self.cursorPos -= 1
@@ -90,14 +117,14 @@ class Editor:
 			self.cursorPos += 1
 			self.clamp()
 		elif key.vk == tcod.KEY_DOWN:
-			(px, py) = self.charToPos(self.cursorPos)
+			px, py = self.charToPos(self.cursorPos)
 			for i in range(self.cursorPos, len(self.text)):
 				if self.text[i] == '\n':
 					self.cursorPos = i+1+px
 					self.clamp()
 					break
 		elif key.vk == tcod.KEY_UP:
-			(px, py) = self.charToPos(self.cursorPos)
+			px, py = self.charToPos(self.cursorPos)
 			for i in reversed(range(self.cursorPos)):
 				if self.text[i] == '\n':
 					self.cursorPos = i-1
@@ -117,9 +144,13 @@ class Editor:
 			self.cursorPos += 1
 			self.clamp()
 
+		self.saveBtn.update(mouse, key)
+
 	def draw(self, con, mouse):
-		(px, py) = self.charToPos(self.cursorPos)
+		px, py = self.charToPos(self.cursorPos)
 
 		con.draw_frame(self.x, self.y, self.width, self.height, self.entity.name, True, tcod.Color(168,168,168), tcod.Color(0,0,168))
 		con.print(self.x+1, self.y+2, self.text, tcod.Color(168,168,168), tcod.Color(0,0,168))
 		tcod.console_set_char_background(con, self.x+1+px, self.y+2+py, tcod.Color(0,168,168))
+
+		self.saveBtn.draw(con, mouse)
