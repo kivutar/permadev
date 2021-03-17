@@ -73,8 +73,5 @@ wanderer_text = """rand_move(self)
 gatherer_text = """item = simple_sensor(self)
 if item != None:
   res = simple_pick(self, item)
-  if res == False:
-    rand_move(self)
-else:
-  rand_move(self)
+rand_move(self)
 """
