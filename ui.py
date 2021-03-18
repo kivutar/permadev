@@ -1,4 +1,6 @@
 import tcod
+import glo
+
 
 class MenuBar:
 
@@ -106,6 +108,7 @@ class Editor:
 
 	def saveAndQuit(self):
 		self.entity.ai_text = self.text
+		glo.uis.remove(self)
 
 	def update(self, mouse, key):
 		if key.vk == tcod.KEY_LEFT:

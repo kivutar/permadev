@@ -28,7 +28,6 @@ def main():
 
     player = Entity(int(screen_width / 2), int(screen_height / 2), '@', "DEV", tcod.white, "")
     entities = [player]
-    uis = []
 
     tcod.console_set_custom_font('my20x20.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
     tcod.console_init_root(screen_width, screen_height, 'PERMADEV', False)
@@ -64,13 +63,13 @@ def main():
 
         if paused:
             con.print(0, 0, "PAUSED", tcod.red, tcod.yellow)
-            uis.append(ui.MenuBar(7, 0, [
+            glo.uis.append(ui.MenuBar(7, 0, [
                     {
                         "name": "Action",
-                        "cb": lambda: uis.append(ui.Dropdown(7, 1, [
+                        "cb": lambda: glo.uis.append(ui.Dropdown(7, 1, [
                             {
                                 "name": "Mark zone",
-                                "cb": lambda: uis.append(ui.Dropdown(19, 1, [
+                                "cb": lambda: glo.uis.append(ui.Dropdown(19, 1, [
                                     {
                                         "name": "Storage",
                                         "cb": lambda: print("foo")
@@ -87,7 +86,7 @@ def main():
                             },
                             {
                                 "name": "Build",
-                                "cb": lambda: uis.append(ui.Dropdown(19, 2, [
+                                "cb": lambda: glo.uis.append(ui.Dropdown(19, 2, [
                                     {
                                         "name": "Wall",
                                         "cb": lambda: print("foo")
@@ -137,12 +136,12 @@ def main():
         if paused and mouse.lbutton:
             for entity in entities:
                 if entity.x == mouse.cx and entity.y == mouse.cy:
-                    uis.append(ui.Editor(3, 4, entity))
+                    glo.uis.append(ui.Editor(3, 4, entity))
 
-        for u in uis:
+        for u in glo.uis:
             u.update(mouse, key)
 
-        for u in uis:
+        for u in glo.uis:
             u.draw(con, mouse)
 
         tcod.console_blit(con, 0, 0, screen_width, screen_height, 0, 0, 0)
@@ -160,7 +159,7 @@ def main():
 
         if toggle:
             paused = not paused
-            uis = []
+            glo.uis = []
 
         if not paused:
             if move:
