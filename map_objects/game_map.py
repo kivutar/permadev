@@ -92,6 +92,9 @@ class GameMap:
                 elif i == 2:
                     bot = Entity(x, y, 'G', "GATHERER", libtcod.green, ai.gatherer_text)
                     self.entities.insert(0, bot)
+                elif i == 3:
+                    bot = Entity(x, y, 'M', "MINER", libtcod.green, ai.miner_text)
+                    self.entities.insert(0, bot)
 
     def create_h_tunnel(self, x1, x2, y):
         for x in range(min(x1, x2), max(x1, x2) + 1):

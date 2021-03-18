@@ -31,6 +31,28 @@ def simple_sensor(self):
 			return item
 	return None
 
+def wall_sensor(self):
+	self.busy += 5
+	self.energy -= 1
+	if self.energy <= 0:
+		self.log.append("SENSOR FAILED: OUT OF ENERGY")
+		return None
+
+	if self.x == 0 or self.y == 0 or self.x == glo.game_map.width or self.y == glo.game_map.height:
+		self.log.append("SENSOR FAILED: OUT OF MAP")
+		return None
+
+	if glo.game_map.tiles[self.x][self.y-1].blocked:
+		return (self.x, self.y-1)
+	if glo.game_map.tiles[self.x][self.y+1].blocked:
+		return (self.x, self.y+1)
+	if glo.game_map.tiles[self.x-1][self.y].blocked:
+		return (self.x-1, self.y)
+	if glo.game_map.tiles[self.x+1][self.y].blocked:
+		return (self.x+1, self.y)
+
+	return None
+
 def rand_move(self):
 	self.busy += 15
 	self.energy -= 2
@@ -64,6 +86,22 @@ def simple_pick(self, item):
 		self.log.append("FAILED PICK: OBJECT NOT FOUND")
 	return False
 
+def dig(self, x, y):
+	self.busy += 10
+	self.energy -= 4
+	if self.energy <= 0:
+		self.log.append("DIG FAILED: OUT OF ENERGY")
+		return None
+
+	if glo.game_map.tiles[x][y].blocked:
+		glo.game_map.tiles[x][y].blocked = False
+		glo.game_map.tiles[x][y].block_sight = False
+		self.log.append("SIMPLE DIG")
+		return True
+	else:
+		self.log.append("FAILED DIG: WALL NOT FOUND")
+	return False
+
 def memorize_location(self, x, y):
 	self.locations.append((x, y))
 
@@ -73,5 +111,11 @@ wanderer_text = """rand_move(self)
 gatherer_text = """item = simple_sensor(self)
 if item:
   simple_pick(self, item)
+rand_move(self)
+"""
+
+miner_text = """wall = wall_sensor(self)
+if wall !=  None:
+  dig(self, wall[0], wall[1])
 rand_move(self)
 """
