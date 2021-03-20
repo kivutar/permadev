@@ -1,3 +1,3 @@
-game_map = []
+game_map = None
 items = []
 uis = []

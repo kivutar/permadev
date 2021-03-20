@@ -60,14 +60,9 @@ def wall_sensor(self):
 		self.log.append("SENSOR FAILED: OUT OF MAP")
 		return None
 
-	if glo.game_map.tiles[self.x][self.y-1].blocked:
-		return (self.x, self.y-1)
-	if glo.game_map.tiles[self.x][self.y+1].blocked:
-		return (self.x, self.y+1)
-	if glo.game_map.tiles[self.x-1][self.y].blocked:
-		return (self.x-1, self.y)
-	if glo.game_map.tiles[self.x+1][self.y].blocked:
-		return (self.x+1, self.y)
+	for d in dirs:
+		if glo.game_map.tiles[self.x+d[0]][self.y+d[1]].block_sight:
+			return (self.x+d[0], self.y+d[1])
 
 	return None
 
