@@ -2,21 +2,21 @@ from random import randint
 import glo
 
 
+dirs = [
+	(-1,-1),
+	(-1, 0),
+	(-1, 1),
+	( 0,-1),
+	( 0, 0),
+	( 0, 1),
+	( 1,-1),
+	( 1, 0),
+	( 1, 1),
+]
+
 # picks a random direction around the entity
 def random_dir():
-	dirs = [
-		(-1,-1),
-		(-1, 0),
-		(-1, 1),
-		( 0,-1),
-		( 0, 0),
-		( 0, 1),
-		( 1,-1),
-		( 1, 0),
-		( 1, 1),
-	]
-	i = randint(0, 8)
-	return dirs[i]
+	return dirs[randint(0, 8)]
 
 # check if an item is on the same tile as the entity
 def simple_sensor(self):
@@ -29,6 +29,24 @@ def simple_sensor(self):
 	for item in glo.items:
 		if item.x == self.x and item.y == self.y:
 			return item
+	return None
+
+def sonar(self):
+	self.busy += 5
+	self.energy -= 2
+	if self.energy <= 0:
+		self.log.append("SONAR FAILED: OUT OF ENERGY")
+		return None
+
+	for d1 in dirs:
+		glo.game_map.tiles[self.x+d1[0]][self.y+d1[1]].explored = True
+		if not glo.game_map.tiles[self.x+d1[0]][self.y+d1[1]].block_sight:
+			for d2 in dirs:
+				glo.game_map.tiles[self.x+d1[0]+d2[0]][self.y+d1[1]+d2[0]].explored = True
+				if not glo.game_map.tiles[self.x+d1[0]+d2[0]][self.y+d1[1]+d2[0]].block_sight:
+					for d3 in dirs:
+						glo.game_map.tiles[self.x+d1[0]+d2[0]+d3[0]][self.y+d1[1]+d2[0]+d3[0]].explored = True
+
 	return None
 
 def wall_sensor(self):
@@ -110,6 +128,7 @@ def memorize_location(self, x, y):
 	self.locations.append((x, y))
 
 wanderer_text = """rand_move(self)
+sonar(self)
 """
 
 gatherer_text = """item = simple_sensor(self)

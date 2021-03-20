@@ -48,6 +48,7 @@ class Entity:
             self.busy = 0
             exec(self.ai_text, {
                 "simple_sensor": ai.simple_sensor,
+                "sonar": ai.sonar,
                 "wall_sensor": ai.wall_sensor,
                 "simple_pick": ai.simple_pick,
                 "dig": ai.dig,
