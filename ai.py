@@ -38,7 +38,7 @@ def wall_sensor(self):
 		self.log.append("SENSOR FAILED: OUT OF ENERGY")
 		return None
 
-	if self.x == 0 or self.y == 0 or self.x == glo.game_map.width or self.y == glo.game_map.height:
+	if self.x == 1 or self.y == 1 or self.x == glo.game_map.width-1 or self.y == glo.game_map.height-1:
 		self.log.append("SENSOR FAILED: OUT OF MAP")
 		return None
 
@@ -54,7 +54,10 @@ def wall_sensor(self):
 	return None
 
 def rand_move(self):
-	self.busy += 15
+	if self.char == 'W':
+		self.busy += 5
+	else:
+		self.busy += 15
 	self.energy -= 2
 	if self.energy <= 0:
 		self.log.append("MOVE FAILED: OUT OF ENERGY")
@@ -87,8 +90,8 @@ def simple_pick(self, item):
 	return False
 
 def dig(self, x, y):
-	self.busy += 10
-	self.energy -= 4
+	self.busy += 20
+	self.energy -= 50
 	if self.energy <= 0:
 		self.log.append("DIG FAILED: OUT OF ENERGY")
 		return None
@@ -96,6 +99,7 @@ def dig(self, x, y):
 	if glo.game_map.tiles[x][y].blocked:
 		glo.game_map.tiles[x][y].blocked = False
 		glo.game_map.tiles[x][y].block_sight = False
+		glo.game_map.tiles[x][y].explored = True
 		self.log.append("SIMPLE DIG")
 		return True
 	else:

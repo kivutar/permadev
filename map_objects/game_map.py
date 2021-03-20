@@ -107,6 +107,10 @@ class GameMap:
             self.tiles[x][y].block_sight = False
 
     def is_blocked(self, x, y):
+        if x == 0 or y == 0:
+            return True
+        if x == self.width-1 or y == self.height-1:
+            return True
         if self.tiles[x][y].blocked:
             return True
         for entity in self.entities:

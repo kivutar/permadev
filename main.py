@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 import tcod
 from entity import Entity
-from fov_functions import initialize_fov, recompute_fov
 from input_handlers import handle_keys
 from map_objects.game_map import GameMap
-from render_functions import clear_all, render_all
+from render_functions import render_all
 from colors import colors
 from pprint import pprint
 import ui
@@ -22,10 +21,6 @@ def main():
     room_min_size = 6
     max_rooms = 20
 
-    fov_algorithm = 0
-    fov_light_walls = True
-    fov_radius = 10
-
     player = Entity(int(screen_width / 2), int(screen_height / 2), '@', "DEV", tcod.white, "")
     entities = [player]
 
@@ -37,10 +32,6 @@ def main():
 
     glo.game_map = GameMap(map_width, map_height, entities, glo.items)
     glo.game_map.make_map(max_rooms, room_min_size, room_max_size, map_width, map_height, player)
-
-    fov_recompute = True
-
-    fov_map = initialize_fov()
 
     key = tcod.Key()
     mouse = tcod.Mouse()
@@ -54,12 +45,7 @@ def main():
             for entity in entities:
                 entity.ai_step()
 
-        if fov_recompute:
-            recompute_fov(fov_map, player.x, player.y, fov_radius, fov_light_walls, fov_algorithm)
-
-        render_all(con, entities, fov_map, fov_recompute, screen_width, screen_height, colors)
-
-        fov_recompute = False
+        render_all(con, entities, screen_width, screen_height, colors)
 
         if paused:
             con.print(0, 0, "PAUSED", tcod.red, tcod.yellow)
@@ -148,8 +134,6 @@ def main():
 
         tcod.console_flush()
 
-        clear_all(con, entities)
-
         action = handle_keys(key)
 
         move = action.get('move')
@@ -166,7 +150,6 @@ def main():
                 dx, dy = move
                 if not glo.game_map.is_blocked(player.x + dx, player.y + dy):
                     player.move(dx, dy)
-                    fov_recompute = True
 
         if exit:
             return True
