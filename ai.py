@@ -81,7 +81,7 @@ def move(self, dir):
 		d = (0, 1)
 	else:
 		self.log.append("MOVE FAILED: UNKNOWN DIRECTION")
-		return None
+		return False
 
 	if self.char == 'W':
 		self.busy += 5
@@ -92,8 +92,10 @@ def move(self, dir):
 	if not glo.game_map.is_blocked(self.x + d[0], self.y + d[1]):
 		self.move(d[0], d[1])
 		self.log.append("SIMPLE MOVE TO %s %s" % d)
+		return True
 	else:
 		self.log.append("FAILED MOVE TO %s %s" % d)
+		return False
 
 def simple_pick(self, item):
 	self.busy += 10
@@ -134,7 +136,9 @@ def dig(self, x, y):
 def memorize_location(self, x, y):
 	self.locations.append((x, y))
 
-wanderer_text = """move(self, "rand")
+wanderer_text = """
+if not move(self, self.dir):
+	self.dir = ["north", "south", "east", "west"][randint(0, 3)]
 sonar(self)
 """
 

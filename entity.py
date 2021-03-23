@@ -1,6 +1,7 @@
 import tcod
 import ai
 import glo
+import random
 
 
 class Entity:
@@ -10,6 +11,7 @@ class Entity:
     def __init__(self, x, y, char, name, color, ai_text="", blocking=True, isbot=False):
         self.x = x
         self.y = y
+        self.dir = "north"
         self.char = char
         self.name = name
         self.color = color
@@ -57,6 +59,7 @@ class Entity:
                 "simple_pick": ai.simple_pick,
                 "dig": ai.dig,
                 "move": ai.move,
+                "randint": random.randint,
                 "self": self,
                 })
 
