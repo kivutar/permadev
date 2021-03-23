@@ -68,17 +68,27 @@ def wall_sensor(self):
 
 	return None
 
-def rand_move(self):
+def move(self, dir):
+	if dir == "rand":
+		d = random_dir()
+	elif dir == "west":
+		d = (-1, 0)
+	elif dir == "east":
+		d = (1, 0)
+	elif dir == "north":
+		d = (0, -1)
+	elif dir == "south":
+		d = (0, 1)
+	else:
+		self.log.append("MOVE FAILED: UNKNOWN DIRECTION")
+		return None
+
 	if self.char == 'W':
 		self.busy += 5
 	else:
 		self.busy += 15
 	self.energy -= 2
-	if self.energy <= 0:
-		self.log.append("MOVE FAILED: OUT OF ENERGY")
-		return None
 
-	d = random_dir()
 	if not glo.game_map.is_blocked(self.x + d[0], self.y + d[1]):
 		self.move(d[0], d[1])
 		self.log.append("SIMPLE MOVE TO %s %s" % d)
@@ -124,21 +134,21 @@ def dig(self, x, y):
 def memorize_location(self, x, y):
 	self.locations.append((x, y))
 
-wanderer_text = """rand_move(self)
+wanderer_text = """move(self, "rand")
 sonar(self)
 """
 
-bat_text = """rand_move(self)
+bat_text = """move(self, "rand")
 """
 
 gatherer_text = """item = simple_sensor(self)
 if item:
   simple_pick(self, item)
-rand_move(self)
+move(self, "rand")
 """
 
 miner_text = """wall = wall_sensor(self)
 if wall !=  None:
   dig(self, wall[0], wall[1])
-rand_move(self)
+move(self, "rand")
 """

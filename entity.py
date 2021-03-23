@@ -56,7 +56,7 @@ class Entity:
                 "wall_sensor": ai.wall_sensor,
                 "simple_pick": ai.simple_pick,
                 "dig": ai.dig,
-                "rand_move": ai.rand_move,
+                "move": ai.move,
                 "self": self,
                 })
 
