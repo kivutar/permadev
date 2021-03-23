@@ -19,7 +19,7 @@ class GameMap:
 
         return tiles
 
-    def make_map(self, max_rooms, room_min_size, room_max_size, map_width, map_height, player):
+    def make_map(self, max_rooms, room_min_size, room_max_size, map_width, map_height):
         rooms = []
         num_rooms = 0
 
@@ -48,9 +48,9 @@ class GameMap:
                 (new_x, new_y) = new_room.center()
 
                 if num_rooms == 0:
-                    # this is the first room, where the player starts at
-                    player.x = new_x
-                    player.y = new_y
+                    self.entities.insert(0, Entity(new_x, new_y, 'W', "WANDERER", libtcod.green, ai.wanderer_text))
+                    self.entities.insert(0, Entity(new_x, new_y+1, 'G', "GATHERER", libtcod.green, ai.gatherer_text))
+                    self.entities.insert(0, Entity(new_x+1, new_y, 'M', "MINER", libtcod.green, ai.miner_text))
                 else:
                     # all rooms after the first:
                     # connect it to the previous room with a tunnel
@@ -84,17 +84,6 @@ class GameMap:
                     self.items.insert(0, Entity(x, y, '.', "Stone", libtcod.grey))
                 elif i == 2:
                     self.items.insert(0, Entity(x, y, '"', "Grass", colors.get('grass')))
-
-                i = randint(0, 60)
-                if i == 1:
-                    bot = Entity(x, y, 'W', "WANDERER", libtcod.green, ai.wanderer_text)
-                    self.entities.insert(0, bot)
-                elif i == 2:
-                    bot = Entity(x, y, 'G', "GATHERER", libtcod.green, ai.gatherer_text)
-                    self.entities.insert(0, bot)
-                elif i == 3:
-                    bot = Entity(x, y, 'M', "MINER", libtcod.green, ai.miner_text)
-                    self.entities.insert(0, bot)
 
     def create_h_tunnel(self, x1, x2, y):
         for x in range(min(x1, x2), max(x1, x2) + 1):

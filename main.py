@@ -21,17 +21,16 @@ def main():
     room_min_size = 6
     max_rooms = 20
 
-    player = Entity(int(screen_width / 2), int(screen_height / 2), '@', "DEV", tcod.white, "")
-    entities = [player]
+    entities = []
 
-    tcod.console_set_custom_font('my20x20.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
+    tcod.console_set_custom_font('my16x16.png', tcod.FONT_TYPE_GREYSCALE | tcod.FONT_LAYOUT_TCOD)
     tcod.console_init_root(screen_width, screen_height, 'PERMADEV', False)
     tcod.sys_set_fps(30)
 
     con = tcod.console.Console(screen_width, screen_height)
 
     glo.game_map = GameMap(map_width, map_height, entities, glo.items)
-    glo.game_map.make_map(max_rooms, room_min_size, room_max_size, map_width, map_height, player)
+    glo.game_map.make_map(max_rooms, room_min_size, room_max_size, map_width, map_height)
 
     key = tcod.Key()
     mouse = tcod.Mouse()
@@ -136,7 +135,6 @@ def main():
 
         action = handle_keys(key)
 
-        move = action.get('move')
         exit = action.get('exit')
         fullscreen = action.get('fullscreen')
         toggle = action.get('toggle')
@@ -144,12 +142,6 @@ def main():
         if toggle:
             paused = not paused
             glo.uis = []
-
-        if not paused:
-            if move:
-                dx, dy = move
-                if not glo.game_map.is_blocked(player.x + dx, player.y + dy):
-                    player.move(dx, dy)
 
         if exit:
             return True
