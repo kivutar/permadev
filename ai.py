@@ -31,6 +31,7 @@ def simple_sensor(self):
 			return item
 	return None
 
+# can detect walls within a range
 def sonar(self):
 	self.busy += 5
 	self.energy -= 2
@@ -49,6 +50,7 @@ def sonar(self):
 
 	return None
 
+# can detect a nearby wall
 def wall_sensor(self):
 	self.busy += 5
 	self.energy -= 1
@@ -124,6 +126,9 @@ def memorize_location(self, x, y):
 
 wanderer_text = """rand_move(self)
 sonar(self)
+"""
+
+bat_text = """rand_move(self)
 """
 
 gatherer_text = """item = simple_sensor(self)

@@ -7,7 +7,7 @@ class Entity:
     """
     A generic object to represent players, enemies, items, etc.
     """
-    def __init__(self, x, y, char, name, color, ai_text="", blocking=True):
+    def __init__(self, x, y, char, name, color, ai_text="", blocking=True, isbot=False):
         self.x = x
         self.y = y
         self.char = char
@@ -24,23 +24,27 @@ class Entity:
         self.energy = 3000
         self.busy = 0
         self.blocking = blocking
+        self.isbot = isbot
         if self.char == 'G':
             self.item_capacity = 3
+        if self.char == 'b':
+            self.ai_text = ai.bat_text
 
     def move(self, dx, dy):
         # Move the entity by a given amount
         self.x += dx
         self.y += dy
 
-        glo.game_map.tiles[self.x-1][self.y-1].explored = True
-        glo.game_map.tiles[self.x-1][self.y].explored = True
-        glo.game_map.tiles[self.x-1][self.y+1].explored = True
-        glo.game_map.tiles[self.x][self.y-1].explored = True
-        glo.game_map.tiles[self.x][self.y].explored = True
-        glo.game_map.tiles[self.x][self.y+1].explored = True
-        glo.game_map.tiles[self.x+1][self.y-1].explored = True
-        glo.game_map.tiles[self.x+1][self.y].explored = True
-        glo.game_map.tiles[self.x+1][self.y+1].explored = True
+        if self.isbot:
+            glo.game_map.tiles[self.x-1][self.y-1].explored = True
+            glo.game_map.tiles[self.x-1][self.y].explored = True
+            glo.game_map.tiles[self.x-1][self.y+1].explored = True
+            glo.game_map.tiles[self.x][self.y-1].explored = True
+            glo.game_map.tiles[self.x][self.y].explored = True
+            glo.game_map.tiles[self.x][self.y+1].explored = True
+            glo.game_map.tiles[self.x+1][self.y-1].explored = True
+            glo.game_map.tiles[self.x+1][self.y].explored = True
+            glo.game_map.tiles[self.x+1][self.y+1].explored = True
 
     def ai_step(self):
         self.busy -= 1
@@ -57,11 +61,12 @@ class Entity:
                 })
 
             # recolor based on battery
-            if self.energy <= 0:
-                self.color = tcod.grey
-            elif self.energy <= 1000:
-                self.color = tcod.red
-            elif self.energy <= 2000:
-                self.color = tcod.yellow
-            else:
-                self.color = tcod.green
+            if self.isbot:
+                if self.energy <= 0:
+                    self.color = tcod.grey
+                elif self.energy <= 1000:
+                    self.color = tcod.red
+                elif self.energy <= 2000:
+                    self.color = tcod.yellow
+                else:
+                    self.color = tcod.green

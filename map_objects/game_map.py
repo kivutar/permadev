@@ -1,4 +1,4 @@
-import tcod as libtcod
+import tcod
 from random import randint
 from map_objects.rectangle import Rect
 from map_objects.tile import Tile
@@ -48,9 +48,10 @@ class GameMap:
                 (new_x, new_y) = new_room.center()
 
                 if num_rooms == 0:
-                    self.entities.insert(0, Entity(new_x, new_y, 'W', "WANDERER", libtcod.green, ai.wanderer_text))
-                    self.entities.insert(0, Entity(new_x, new_y+1, 'G', "GATHERER", libtcod.green, ai.gatherer_text))
-                    self.entities.insert(0, Entity(new_x+1, new_y, 'M', "MINER", libtcod.green, ai.miner_text))
+                    self.entities.insert(0, Entity(new_x, new_y, 'M', "MINER", tcod.green, ai.miner_text, True, True))
+                    self.entities.insert(0, Entity(new_x+1, new_y, 'W', "WANDERER", tcod.green, ai.wanderer_text, True, True))
+                    self.entities.insert(0, Entity(new_x-1, new_y, 'W', "WANDERER", tcod.green, ai.wanderer_text, True, True))
+                    self.entities.insert(0, Entity(new_x, new_y+1, 'G', "GATHERER", tcod.green, ai.gatherer_text, True, True))
                 else:
                     # all rooms after the first:
                     # connect it to the previous room with a tunnel
@@ -79,11 +80,13 @@ class GameMap:
                 self.tiles[x][y].blocked = False
                 self.tiles[x][y].block_sight = False
 
-                i = randint(0, 3)
+                i = randint(0, 50)
                 if i == 1:
-                    self.items.insert(0, Entity(x, y, '.', "Stone", libtcod.grey))
+                    self.items.insert(0, Entity(x, y, '.', "Stone", tcod.grey))
                 elif i == 2:
                     self.items.insert(0, Entity(x, y, '"', "Grass", colors.get('grass')))
+                elif i == 3:
+                    self.entities.insert(0, Entity(x, y, 'b', "Bat", tcod.Color(100, 60, 50)))
 
     def create_h_tunnel(self, x1, x2, y):
         for x in range(min(x1, x2), max(x1, x2) + 1):
