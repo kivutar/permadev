@@ -99,7 +99,7 @@ class UnitDetails:
 				"Pane": Equipments(self.x+11, self.y+1, entity),
 			},
 			{
-				"Button": Button(self.x+1, self.y+4, "Storage", lambda: self.setTab(3)),
+				"Button": Button(self.x+1, self.y+4, "Storage  ", lambda: self.setTab(3)),
 				"Pane": Storage(self.x+11, self.y+1, entity),
 			},
 		]
@@ -240,7 +240,12 @@ class Equipments:
 
 	def draw(self, con, mouse):
 		for i, eq in enumerate(self.entity.equipments):
+			xx = 0
 			con.print(self.x, self.y+i, eq.name, tcod.Color(168,168,168), tcod.Color(0,0,168))
+			xx += len(eq.name)+1
+			for fn in eq.funcs:
+				con.print(self.x+xx, self.y+i, fn.__name__, tcod.Color(0,168,168), tcod.Color(0,0,168))
+				xx += len(fn.__name__)+1
 
 
 class Storage:
