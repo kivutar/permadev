@@ -19,6 +19,7 @@ class Entity:
         self.t = 0
         self.item_capacity = 0
         self.items = []
+        self.equipments = []
         self.location_capacity = 10
         self.locations = []
         self.log = []

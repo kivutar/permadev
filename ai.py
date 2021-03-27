@@ -138,7 +138,12 @@ def memorize_location(self, x, y):
 
 wanderer_text = """
 if not move(self, self.dir):
-	self.dir = ["north", "south", "east", "west"][randint(0, 3)]
+  self.dir = [
+    "north",
+    "south",
+    "east",
+    "west",
+  ][randint(0, 3)]
 sonar(self)
 """
 

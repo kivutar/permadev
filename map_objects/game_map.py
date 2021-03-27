@@ -5,6 +5,7 @@ from map_objects.tile import Tile
 from entity import Entity
 from colors import colors
 import ai
+from equipments import Equipment
 
 class GameMap:
     def __init__(self, width, height, entities, items):
@@ -48,10 +49,29 @@ class GameMap:
                 (new_x, new_y) = new_room.center()
 
                 if num_rooms == 0:
-                    self.entities.insert(0, Entity(new_x, new_y, 'M', "MINER", tcod.green, ai.miner_text, True, True))
-                    self.entities.insert(0, Entity(new_x+1, new_y, 'W', "WANDERER", tcod.green, ai.wanderer_text, True, True))
-                    self.entities.insert(0, Entity(new_x-1, new_y, 'W', "WANDERER", tcod.green, ai.wanderer_text, True, True))
-                    self.entities.insert(0, Entity(new_x, new_y+1, 'G', "GATHERER", tcod.green, ai.gatherer_text, True, True))
+                    m1 = Entity(new_x, new_y, 'M', "MINER", tcod.green, ai.miner_text, True, True)
+                    m1.equipments.append(Equipment("Legs"))
+                    m1.equipments.append(Equipment("Sensor"))
+                    m1.equipments.append(Equipment("Li-ION Battery"))
+                    m1.equipments.append(Equipment("Driller"))
+                    self.entities.insert(0, m1)
+                    w1 = Entity(new_x+1, new_y, 'W', "WANDERER", tcod.green, ai.wanderer_text, True, True)
+                    w1.equipments.append(Equipment("Wheels"))
+                    w1.equipments.append(Equipment("Sonar"))
+                    w1.equipments.append(Equipment("Li-ION Battery"))
+                    self.entities.insert(0, w1)
+                    w2 = Entity(new_x-1, new_y, 'W', "WANDERER", tcod.green, ai.wanderer_text, True, True)
+                    w2.equipments.append(Equipment("Wheels"))
+                    w2.equipments.append(Equipment("Sonar"))
+                    w2.equipments.append(Equipment("Li-ION Battery"))
+                    self.entities.insert(0, w2)
+                    g1 = Entity(new_x, new_y+1, 'G', "GATHERER", tcod.green, ai.gatherer_text, True, True)
+                    g1.equipments.append(Equipment("Legs"))
+                    g1.equipments.append(Equipment("Arms"))
+                    g1.equipments.append(Equipment("Sensor"))
+                    g1.equipments.append(Equipment("Li-ION Battery"))
+                    g1.equipments.append(Equipment("Item Storage"))
+                    self.entities.insert(0, g1)
                 else:
                     # all rooms after the first:
                     # connect it to the previous room with a tunnel
