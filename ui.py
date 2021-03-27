@@ -207,7 +207,7 @@ class Logs:
 		self.x = x
 		self.y = y
 		self.width = 40
-		self.height = 24
+		self.height = 22
 		self.entity = entity
 
 	def update(self, mouse, key):
@@ -215,6 +215,8 @@ class Logs:
 
 	def draw(self, con, mouse):
 		for i, line in enumerate(self.entity.log):
+			if i >= self.height:
+				return
 			con.print(self.x, self.y+i, line, tcod.Color(168,168,168), tcod.Color(0,0,168))
 
 

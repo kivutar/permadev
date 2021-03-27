@@ -136,8 +136,7 @@ def dig(self, x, y):
 def memorize_location(self, x, y):
 	self.locations.append((x, y))
 
-wanderer_text = """
-if not move(self, self.dir):
+wanderer_text = """if not move(self, self.dir):
   self.dir = [
     "north",
     "south",
