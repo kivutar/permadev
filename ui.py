@@ -92,6 +92,10 @@ class UnitDetails:
 				"Button": Button(self.x+1, self.y+2, "Logs     ", lambda: self.setTab(1)),
 				"Pane": Logs(self.x+10, self.y, entity),
 			},
+			{
+				"Button": Button(self.x+1, self.y+3, "Equipment", lambda: self.setTab(2)),
+				"Pane": Equipments(self.x+10, self.y, entity),
+			},
 		]
 	
 	def setTab(self, i):
@@ -213,3 +217,20 @@ class Logs:
 	def draw(self, con, mouse):
 		for i, line in enumerate(self.entity.log):
 			con.print(self.x+1, self.y+1+i, line, tcod.Color(168,168,168), tcod.Color(0,0,168))
+
+
+class Equipments:
+
+	def __init__(self, x, y, entity):
+		self.x = x
+		self.y = y
+		self.width = 40
+		self.height = 24
+		self.entity = entity
+
+	def update(self, mouse, key):
+		pass
+
+	def draw(self, con, mouse):
+		for i, eq in enumerate(self.entity.equipments):
+			con.print(self.x+1, self.y+1+i, eq.name, tcod.Color(168,168,168), tcod.Color(0,0,168))
