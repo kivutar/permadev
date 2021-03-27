@@ -121,7 +121,7 @@ def main():
         if paused and mouse.lbutton:
             for entity in entities:
                 if entity.x == mouse.cx and entity.y == mouse.cy and entity.isbot:
-                    glo.uis.append(ui.Editor(3, 4, entity))
+                    glo.uis.append(ui.UnitDetails(3, 4, entity))
 
         for u in glo.uis:
             u.update(mouse, key)

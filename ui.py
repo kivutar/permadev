@@ -73,6 +73,46 @@ class Button:
 			bg = tcod.green
 		con.print(self.x, self.y, self.text, tcod.white, bg)
 
+
+class UnitDetails:
+
+	def __init__(self, x, y, entity):
+		self.x = x
+		self.y = y
+		self.entity = entity
+		self.width = 50
+		self.height = 24
+		self.active_tab = 0
+		self.tabs = [
+			{
+				"Button": Button(self.x+1, self.y+1, "AI       ", lambda: self.setTab(0)),
+				"Pane": Editor(self.x+10, self.y, entity),
+			},
+			{
+				"Button": Button(self.x+1, self.y+2, "Logs     ", lambda: self.setTab(1)),
+				"Pane": Logs(self.x+10, self.y, entity),
+			},
+		]
+	
+	def setTab(self, i):
+		self.active_tab = i
+
+	def update(self, mouse, key):
+		for t in self.tabs:
+			t.get("Button").update(mouse, key)
+
+	def draw(self, con, mouse):
+
+
+		con.draw_frame(self.x, self.y, self.width, self.height, self.entity.name, True, tcod.Color(168,168,168), tcod.Color(0,0,168))
+
+		for t in self.tabs:
+			t.get("Button").draw(con, mouse)
+
+		tab = self.tabs[self.active_tab]
+		tab.get("Pane").draw(con, mouse)
+
+
 class Editor:
 
 	def __init__(self, x, y, entity):
@@ -150,8 +190,25 @@ class Editor:
 	def draw(self, con, mouse):
 		px, py = self.charToPos(self.cursorPos)
 
-		con.draw_frame(self.x, self.y, self.width, self.height, self.entity.name, True, tcod.Color(168,168,168), tcod.Color(0,0,168))
+		#con.draw_frame(self.x, self.y, self.width, self.height, self.entity.name, True, tcod.Color(168,168,168), tcod.Color(0,0,168))
 		con.print(self.x+1, self.y+2, self.text, tcod.Color(168,168,168), tcod.Color(0,0,168))
 		tcod.console_set_char_background(con, self.x+1+px, self.y+2+py, tcod.Color(0,168,168))
 
 		self.saveBtn.draw(con, mouse)
+
+
+class Logs:
+
+	def __init__(self, x, y, entity):
+		self.x = x
+		self.y = y
+		self.width = 40
+		self.height = 24
+		self.entity = entity
+
+	def update(self, mouse, key):
+		pass
+
+	def draw(self, con, mouse):
+		for i, line in enumerate(self.entity.log):
+			con.print(self.x+1, self.y+1+i, line, tcod.Color(168,168,168), tcod.Color(0,0,168))
