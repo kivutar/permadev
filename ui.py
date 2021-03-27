@@ -100,11 +100,12 @@ class UnitDetails:
 	def update(self, mouse, key):
 		for t in self.tabs:
 			t.get("Button").update(mouse, key)
+			t.get("Pane").update(mouse, key)
 
 	def draw(self, con, mouse):
-
-
 		con.draw_frame(self.x, self.y, self.width, self.height, self.entity.name, True, tcod.Color(168,168,168), tcod.Color(0,0,168))
+		tcod.console_set_default_foreground(con, tcod.Color(168,168,168))
+		con.vline(self.x+10, self.y+1, self.height-2)
 
 		for t in self.tabs:
 			t.get("Button").draw(con, mouse)
@@ -123,7 +124,7 @@ class Editor:
 		self.entity = entity
 		self.text = self.entity.ai_text
 		self.cursorPos = len(self.text)
-		self.saveBtn = Button(self.x, self.y+self.height-1, "SAVE", lambda: self.saveAndQuit())
+		self.saveBtn = Button(self.x+1, self.y+self.height-1, "SAVE", lambda: self.saveAndQuit())
 
 	def charToPos(self, c):
 		x = 0
@@ -148,7 +149,7 @@ class Editor:
 
 	def saveAndQuit(self):
 		self.entity.ai_text = self.text
-		glo.uis.remove(self)
+		#glo.uis.remove(self)
 
 	def update(self, mouse, key):
 		if key.vk == tcod.KEY_LEFT:
