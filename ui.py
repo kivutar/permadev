@@ -29,6 +29,7 @@ class MenuBar:
 			con.print(self.x+x, self.y, item.get("name"), tcod.white, bg)
 			x += w + 1
 
+
 class Dropdown:
 
 	def __init__(self, x, y, items):
@@ -51,6 +52,7 @@ class Dropdown:
 			if mouse.cy == self.y+1+i and mouse.cx >= self.x and mouse.cx <= self.x+self.width:
 				bg = tcod.green
 			con.print(self.x+1, self.y+1+i, item.get("name"), tcod.white, bg)
+
 
 class Button:
 
@@ -95,6 +97,10 @@ class UnitDetails:
 			{
 				"Button": Button(self.x+1, self.y+3, "Equipment", lambda: self.setTab(2)),
 				"Pane": Equipments(self.x+11, self.y+1, entity),
+			},
+			{
+				"Button": Button(self.x+1, self.y+4, "Storage", lambda: self.setTab(3)),
+				"Pane": Storage(self.x+11, self.y+1, entity),
 			},
 		]
 	
@@ -235,3 +241,20 @@ class Equipments:
 	def draw(self, con, mouse):
 		for i, eq in enumerate(self.entity.equipments):
 			con.print(self.x, self.y+i, eq.name, tcod.Color(168,168,168), tcod.Color(0,0,168))
+
+
+class Storage:
+
+	def __init__(self, x, y, entity):
+		self.x = x
+		self.y = y
+		self.width = 40
+		self.height = 24
+		self.entity = entity
+
+	def update(self, mouse, key):
+		pass
+
+	def draw(self, con, mouse):
+		for i, item in enumerate(self.entity.items):
+			con.print(self.x, self.y+i, item.name, tcod.Color(168,168,168), tcod.Color(0,0,168))
