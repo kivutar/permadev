@@ -86,15 +86,15 @@ class UnitDetails:
 		self.tabs = [
 			{
 				"Button": Button(self.x+1, self.y+1, "AI       ", lambda: self.setTab(0)),
-				"Pane": Editor(self.x+10, self.y, entity),
+				"Pane": Editor(self.x+11, self.y+1, entity),
 			},
 			{
 				"Button": Button(self.x+1, self.y+2, "Logs     ", lambda: self.setTab(1)),
-				"Pane": Logs(self.x+10, self.y, entity),
+				"Pane": Logs(self.x+11, self.y+1, entity),
 			},
 			{
 				"Button": Button(self.x+1, self.y+3, "Equipment", lambda: self.setTab(2)),
-				"Pane": Equipments(self.x+10, self.y, entity),
+				"Pane": Equipments(self.x+11, self.y+1, entity),
 			},
 		]
 	
@@ -124,11 +124,11 @@ class Editor:
 		self.x = x
 		self.y = y
 		self.width = 40
-		self.height = 24
+		self.height = 22
 		self.entity = entity
 		self.text = self.entity.ai_text
 		self.cursorPos = len(self.text)
-		self.saveBtn = Button(self.x+1, self.y+self.height-1, "SAVE", lambda: self.saveAndQuit())
+		self.saveBtn = Button(self.x, self.y+self.height, "SAVE", lambda: self.saveAndQuit())
 
 	def charToPos(self, c):
 		x = 0
@@ -195,9 +195,8 @@ class Editor:
 	def draw(self, con, mouse):
 		px, py = self.charToPos(self.cursorPos)
 
-		#con.draw_frame(self.x, self.y, self.width, self.height, self.entity.name, True, tcod.Color(168,168,168), tcod.Color(0,0,168))
-		con.print(self.x+1, self.y+2, self.text, tcod.Color(168,168,168), tcod.Color(0,0,168))
-		tcod.console_set_char_background(con, self.x+1+px, self.y+2+py, tcod.Color(0,168,168))
+		con.print(self.x, self.y, self.text, tcod.Color(168,168,168), tcod.Color(0,0,168))
+		tcod.console_set_char_background(con, self.x+px, self.y+py, tcod.Color(0,168,168))
 
 		self.saveBtn.draw(con, mouse)
 
@@ -216,7 +215,7 @@ class Logs:
 
 	def draw(self, con, mouse):
 		for i, line in enumerate(self.entity.log):
-			con.print(self.x+1, self.y+1+i, line, tcod.Color(168,168,168), tcod.Color(0,0,168))
+			con.print(self.x, self.y+i, line, tcod.Color(168,168,168), tcod.Color(0,0,168))
 
 
 class Equipments:
@@ -233,4 +232,4 @@ class Equipments:
 
 	def draw(self, con, mouse):
 		for i, eq in enumerate(self.entity.equipments):
-			con.print(self.x+1, self.y+1+i, eq.name, tcod.Color(168,168,168), tcod.Color(0,0,168))
+			con.print(self.x, self.y+i, eq.name, tcod.Color(168,168,168), tcod.Color(0,0,168))
